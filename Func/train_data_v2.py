@@ -92,7 +92,7 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
             # First loop: Generate blow5 files
             for j in range(reads_per_sequence):
                 output_file = os.path.join(blow5_folder, f"seq_{i}_read_{j}.blow5")
-                s = random.randint(0, len(clear_seeds))
+                s = random.randint(0, len(clear_seeds)-1)
 
                 # Generate the blow5 file using squigulator
                 if squigulator_type:
@@ -147,11 +147,11 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
             print(f"FASTA file not found: {fasta_file}")
 
 
-fasta_folder = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Fasta"
-blow5_folder = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Blow5"
-numpy_folder = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Numpy"
+fasta_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Fasta"
+blow5_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Blow5"
+numpy_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 clear_seed_file = "/workspaces/ForPrax/Func/clear_seeds.npy"
 
 
 #generate_fasta_files(50000,fasta_folder,20,bias=0.75)
-process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file,squigulator_type="--ideal")
+process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file)

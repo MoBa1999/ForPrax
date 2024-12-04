@@ -68,11 +68,11 @@ def get_data_loader(data_path_numpy, end_sequence, batch_size=16, start_sequence
     for i in range(start_sequence, end_sequence):
         try:
             # Load all signals for the sequence
-            sequence_signals = np.load(f"{data_path_numpy}/signal_seq_{i}.npy")
+            sequence_signals = np.load(f"{data_path_numpy}/signals_seq_{i}.npy")
             # Find the longest signal in the current sequence
             max_length = max(max_length, max(signal.shape[0] for signal in sequence_signals))
         except FileNotFoundError:
-            print(f"{data_path_numpy}/signal_seq_{i}.npy - Signal file not found, skipping sequence.")
+            print(f"{data_path_numpy}/signals_seq_{i}.npy - Signal file not found, skipping sequence.")
     
     print(f"{max_length} is the longest length of a read in the dataset with {end_sequence - start_sequence} sequences.")
 
@@ -85,17 +85,17 @@ def get_data_loader(data_path_numpy, end_sequence, batch_size=16, start_sequence
     for i in range(start_sequence, end_sequence):
         try:
             # Load target sequence
-            seq = np.load(f"{data_path_numpy}/signal_seq_{i}_tarseq.npy")
+            seq = np.load(f"{data_path_numpy}/sequence_seq_{i}.npy")
         except FileNotFoundError:
-            print(f"{data_path_numpy}/signal_seq_{i}_tarseq.npy - Target sequence file not found, skipping sequence.")
+            print(f"{data_path_numpy}/sequence_seq_{i}.npy - Target sequence file not found, skipping sequence.")
             continue
 
         try:
             # Load all signals for the sequence
-            sequence_signals = np.load(f"{data_path_numpy}/signal_seq_{i}.npy")
+            sequence_signals = np.load(f"{data_path_numpy}/signals_seq_{i}.npy")
             sequence_signals = sequence_signals[0:num_reads,:]
         except FileNotFoundError:
-            print(f"{data_path_numpy}/signal_seq_{i}.npy - Signal file not found, skipping sequence.")
+            print(f"{data_path_numpy}/signals_seq_{i}.npy - Signal file not found, skipping sequence.")
             continue
 
         # Normalize and pad each signal in the sequence

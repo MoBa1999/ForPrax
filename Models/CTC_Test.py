@@ -3,6 +3,9 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 from Levenshtein import distance as distance
+import sys
+sys.path.append("/workspaces/ForPrax/Func")
+sys.path.append("/workspaces/ForPrax/Models")
 from eval_utils import evaluate_model_ham
 
 class CTC_Test_Model(nn.Module):
