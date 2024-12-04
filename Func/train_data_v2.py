@@ -23,7 +23,7 @@ def base_to_vector(base):
             vector[3] = 1
         return vector
 
-def generate_fasta_files(num_files, output_folder, sequences_per_file, bias=0.5):
+def generate_fasta_files(num_files, output_folder, sequences_per_file, bias=0.5, start = 0):
     """
     Generates multiple FASTA files with random sequences, with an optional bias against repeated bases.
 
@@ -50,7 +50,7 @@ def generate_fasta_files(num_files, output_folder, sequences_per_file, bias=0.5)
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for i in range(num_files):
+    for i in range(start, num_files+start):
         filename = f"fasta_file_{i}.fasta"
         filepath = os.path.join(output_folder, filename)
 
@@ -59,9 +59,9 @@ def generate_fasta_files(num_files, output_folder, sequences_per_file, bias=0.5)
                 sequence = generate_random_sequence(200, bias)
                 f.write(f">File_{i}_Seq_{j}\n{sequence}\n")
         if i % 100 == 0:
-            print(f"{i/num_files * 100} % done")
+            print(f"{(i-start)/num_files * 100} % done")
 
-def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence, cs_file, squigulator_type=None):
+def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence, cs_file, squigulator_type=None, start = 0):
     """
     Processes sequences from FASTA files, generating blow5 files and converting them to NumPy arrays.
 
@@ -79,7 +79,7 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
     num_files = len(fasta_files)
     print(f"{num_files} FASTA Files found in {fasta_folder}")
 
-    for i, fasta_file in enumerate(fasta_files):
+    for i, fasta_file in enumerate(fasta_files[start:], start=start):
         try:
             # Read and process the FASTA file (assuming second line contains the sequence)
             with open(fasta_file, 'r') as file:
@@ -153,5 +153,5 @@ numpy_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 clear_seed_file = "/workspaces/ForPrax/Func/clear_seeds.npy"
 
 
-#generate_fasta_files(50000,fasta_folder,20,bias=0.75)
-process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file)
+#generate_fasta_files(50000,fasta_folder,20,bias=0.75, start = 50000)
+process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=50000)

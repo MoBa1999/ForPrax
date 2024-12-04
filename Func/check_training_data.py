@@ -65,9 +65,9 @@ example_folder = "/workspaces/ForPrax/Temp"
 #np.save("clear_seeds.npy", seeds)
 signals = []
 seqs = []
-data_path = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Numpy"
+data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
-sequence = 1 #7000 zum trainieren
+sequence = 12345 #7000 zum trainieren
 num_reads = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
 signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
 for j in num_reads:
