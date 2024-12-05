@@ -79,9 +79,11 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
     num_files = len(fasta_files)
     print(f"{num_files} FASTA Files found in {fasta_folder}")
 
-    for i, fasta_file in enumerate(fasta_files[start:], start=start):
+    for i in range(start, num_files):
+      
         try:
             # Read and process the FASTA file (assuming second line contains the sequence)
+            fasta_file = os.path.join(fasta_folder,f"fasta_file_{i}.fasta")
             with open(fasta_file, 'r') as file:
                 lines = file.readlines()
                 sequence = lines[1].strip()  # Second line (assuming sequence)
@@ -147,11 +149,11 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
             print(f"FASTA file not found: {fasta_file}")
 
 
-fasta_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Fasta"
-blow5_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Blow5"
-numpy_folder = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
+fasta_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Fasta"
+blow5_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Blow5"
+numpy_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
 clear_seed_file = "/workspaces/ForPrax/Func/clear_seeds.npy"
 
 
-#generate_fasta_files(50000,fasta_folder,20,bias=0.75, start = 50000)
-process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=50000)
+#generate_fasta_files(1000,fasta_folder,1,bias=0.75, start = 0)
+process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=0, squigulator_type="--ideal-time")

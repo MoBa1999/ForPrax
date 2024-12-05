@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from CTC_Test import CTC_Test_Model
 
 #test_path = "/media/hdd1/MoritzBa/Test_Data/Rd_Data_Numpy"
-test_path = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Numpy"
+test_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
 model_path_general = "/media/hdd1/MoritzBa/Models"
 
@@ -22,7 +22,7 @@ model_path_general = "/media/hdd1/MoritzBa/Models"
 test_lev_accuracies = {}
 
 seqs = [10000, 20000, 40000]
-nr = [1, 5, 10]
+nr = [1, 5, 10, 20]
 device = get_device(gpu_index=1)
 max_length = 2100
 
