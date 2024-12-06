@@ -9,6 +9,7 @@ def check_squigulator(fasta_folder, blow5_folder, reads_per_sequence):
 
     clear_seeds = []
     input_file = f"{fasta_folder}/fasta_file_{1000}.fasta"
+    start_data = 0
     for j in range (reads_per_sequence):
         output_file = f"{blow5_folder}/seq_{2}_read_{j}.blow5"
         # Command to be executed
@@ -25,7 +26,9 @@ def check_squigulator(fasta_folder, blow5_folder, reads_per_sequence):
         for read in reads:
             signal = read['signal']
             #plt.plot(signal, label = "Ideal Squigulator Signal")
-        if signal[0] == 633:
+            if j == 0:
+                start_data = signal[0]
+        if signal[0] == start_data:
             clear_seeds.append(j+1)
     return clear_seeds
 
@@ -36,8 +39,9 @@ def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, 
     for j in range (reads_per_sequence):
         output_file = f"{blow5_folder}/seq_{2}_read_{j}.blow5"
         # Command to be executed
+        print(input_file)
         if squig != "":
-            command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", input_file, "-o", output_file, "-n", "1", squig,"--seed", str(seeds[j])]
+            command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", input_file, "-o", output_file, "-n", "1", "--seed", str(seeds[j]), squig]
         else:
             command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", input_file, "-o", output_file, "-n", "1","--seed",str(seeds[j])]
         
@@ -59,28 +63,29 @@ def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, 
 
 fasta_dir = "/media/hdd1/MoritzBa/Time/Rd_Data_Fasta"
 example_folder = "/workspaces/ForPrax/Temp"
-#seeds = check_squigulator(fasta_dir,example_folder,40000)
-#print(seeds)
-#seeds = np.array(seeds)
-#np.save("clear_seeds.npy", seeds)
+seeds = check_squigulator(fasta_dir,example_folder,10000)
+print(seeds)
+seeds = np.array(seeds)
+np.save("/media/hdd1/MoritzBa/Time/clear_seeds.npy", seeds)
 signals = []
 seqs = []
 data_path = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
 
-sequence = 2 #7000 zum trainieren
-num_reads = [5,6]
-signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
+sequence = 98 #7000 zum trainieren
+num_reads = []
+#signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
 for j in num_reads:
     # Load signal and pad to max_length
     
-    plt.plot(signals[j,:], label = "Data Read")
+    plt.plot(signals[j,:], label = f"Data Read {j}")
 
 
-#seeds = np.load("clear_seeds.npyS")
-seeds = [1]
-plot_squigulator(fasta_dir,example_folder,len(seeds),seeds, sequence, squig="--ideal")  
-seeds = []  
-plot_squigulator(fasta_dir,example_folder,len(seeds),seeds, sequence, squig="")    
+#seeds = np.load("/media/hdd1/MoritzBa/Time/clear_seeds.npy")
+#print(seeds)
+
+#plot_squigulator(fasta_dir,example_folder,len(seeds),seeds, sequence, squig="--ideal-time")  
+
+#plot_squigulator(fasta_dir,example_folder,len(seeds),seeds, sequence, squig="--ideal-time")    
 plt.xlim(0,400)
-plt.legend()
+#plt.legend()
 plt.show()

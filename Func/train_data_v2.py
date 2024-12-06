@@ -94,8 +94,11 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
             # First loop: Generate blow5 files
             for j in range(reads_per_sequence):
                 output_file = os.path.join(blow5_folder, f"seq_{i}_read_{j}.blow5")
+                #s = 1
                 s = random.randint(0, len(clear_seeds)-1)
-
+                print(f"Seed: {clear_seeds[s]} zu read: {j}" )
+                
+                print(fasta_file)
                 # Generate the blow5 file using squigulator
                 if squigulator_type:
                     command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", fasta_file, "-o", output_file, "-n", "1", "--seed", str(clear_seeds[s]), squigulator_type]
@@ -122,6 +125,7 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
                             input()
                             signal_array = signal_array[:fixed_length]
 
+                        
                         all_signals.append(signal_array)
 
                     s5.close()
@@ -131,7 +135,8 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
                 # Delete the BLOW5 file after processing
                 if os.path.exists(output_file):
                     os.remove(output_file)
-
+            
+            
             # Combine signals into one NumPy array
             signal_array = np.vstack(all_signals)  # Combine aligned signals into one array
 
@@ -147,7 +152,89 @@ def process_sequence(fasta_folder, blow5_folder, output_dir, reads_per_sequence,
 
         except FileNotFoundError:
             print(f"FASTA file not found: {fasta_file}")
+def plot_sequence(fasta_folder, blow5_folder, seeds, squigulator_type=None, start = 0):
+    """
+    Processes sequences from FASTA files, generating blow5 files and converting them to NumPy arrays.
 
+    Args:
+        fasta_folder (str): Directory containing FASTA files.
+        blow5_folder (str): Directory to store intermediate blow5 files.
+        output_dir (str): Directory to store final NumPy arrays.
+        reads_per_sequence (int): Number of reads to generate per sequence.
+        cs_file (str): Path to the clear seeds file (.npy format).
+        squigulator_type (str, optional): Additional squigulator parameter, if any.
+    """
+    fixed_length = 2100  # Fixed length to pad signal reads
+    fasta_files = [os.path.join(fasta_folder, file) for file in os.listdir(fasta_folder) if file.endswith(".fasta")]
+    num_files = len(fasta_files)
+    print(f"{num_files} FASTA Files found in {fasta_folder}")
+
+    for i in range(start, num_files):
+      
+        try:
+            # Read and process the FASTA file (assuming second line contains the sequence)
+            fasta_file = os.path.join(fasta_folder,f"fasta_file_{i}.fasta")
+            with open(fasta_file, 'r') as file:
+                lines = file.readlines()
+                sequence = lines[1].strip()  # Second line (assuming sequence)
+
+            sequence_data = np.array([base_to_vector(base) for base in sequence])
+            all_signals = []
+            
+            # First loop: Generate blow5 files
+            for j in range(len(seeds)):
+                output_file = os.path.join(blow5_folder, f"seq_{i}_read_{j}.blow5")
+                s = seeds[j]
+                print(s)
+                print(fasta_file)
+                # Generate the blow5 file using squigulator
+                if squigulator_type:
+                    command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", fasta_file, "-o", output_file, "-n", "1", "--seed", str(s), squigulator_type]
+                else:
+                    command = ["/workspaces/ForPrax/Squigulator/squigulator", "-x", "dna-r9-min", fasta_file, "-o", output_file, "-n", "1", "--seed", str(s)]
+                subprocess.run(command, check=True)
+
+            # Second loop: Read blow5 files and pad signals to the fixed length
+            for j in range(len(seeds)):
+                output_file = os.path.join(blow5_folder, f"seq_{i}_read_{j}.blow5")
+                try:
+                    s5 = pyslow5.Open(output_file, 'r')
+                    reads = s5.seq_reads()
+
+                    for read in reads:
+                        signal = read['signal']
+                        signal_array = np.array(signal, dtype=np.int16)
+
+                        # Pad signal to the fixed length
+                        if len(signal_array) < fixed_length:
+                            signal_array = np.pad(signal_array, (0, fixed_length - len(signal_array)), mode='constant')
+                        elif len(signal_array) > fixed_length:
+                            print("Aaachtung zu lang!")
+                            input()
+                            signal_array = signal_array[:fixed_length]
+
+                        plt.plot(signal, label = f"Seed {seeds[j]}")
+                        
+                        plt.xlim(0,400)
+                        
+                        all_signals.append(signal_array)
+
+                    s5.close()
+                    
+                except FileNotFoundError:
+                    print(f"BLOW5 file not found: {output_file}")
+                
+                # Delete the BLOW5 file after processing
+                if os.path.exists(output_file):
+                    os.remove(output_file)
+            
+            plt.legend()
+            plt.show()
+
+            input()
+
+        except FileNotFoundError:
+            print(f"FASTA file not found: {fasta_file}")
 
 fasta_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Fasta"
 blow5_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Blow5"
@@ -155,5 +242,10 @@ numpy_folder = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
 clear_seed_file = "/workspaces/ForPrax/Func/clear_seeds.npy"
 
 
-#generate_fasta_files(1000,fasta_folder,1,bias=0.75, start = 0)
-process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=0, squigulator_type="--ideal-time")
+
+
+#generate_fasta_files(60000,fasta_folder,1,bias=0.75, start = 0)
+seeds = [9258, 18205]
+#plot_sequence(fasta_folder,blow5_folder,seeds = seeds, start=0, squigulator_type="--ideal")
+#process_sequence(fasta_folder,blow5_folder,numpy_folder,10,clear_seed_file, squigulator_type="--ideal")
+
