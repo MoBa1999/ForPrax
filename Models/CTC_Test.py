@@ -178,7 +178,7 @@ class CTC_Test_Model(nn.Module):
                     f"Theoretical Accuracy from Levenshtein: {theoretical_accuracy:.2f}%,"
                     f"Test-Lev-Accuracy: {test_acc:.2f}")
             
-            if avg_loss <= 0.001:
+            if avg_loss <= 0.01:
                 print(f"Training completed early! -> Maximum Test Accuracy: {max(test_accs)}")
                 return loss_, ham_dist_, accs_, test_accs
 
