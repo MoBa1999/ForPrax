@@ -22,8 +22,8 @@ model_path_general = "/media/hdd1/MoritzBa/Models"
 
 test_lev_accuracies = {}
 
-seqs = [10000, 20000]
-nr = [1, 5, 10, 20]
+seqs = [10000, 20000, 40000]
+nr = [1, 5, 10]
 device = get_device(gpu_index=1)
 max_length = 2100
 
@@ -39,8 +39,8 @@ for seq in seqs:
       
             _, test_loader = get_data_loader(
                 test_path, 
-                end_sequence=25000, 
-                start_sequence=20000, 
+                end_sequence=50000, 
+                start_sequence=40000, 
                 batch_size=16, 
                 num_reads=r, 
                 overwrite_max_length=max_length, 
@@ -86,6 +86,8 @@ for r in nr:
 plt.xlabel('Training Sequences', fontsize=14)
 plt.ylabel('Test Levenshtein Accuracy', fontsize=14)
 plt.tick_params(axis='both', labelsize=12)
+plt.xlim(0,50000)
+plt.ylim(60,100)
 plt.legend()
 plt.tight_layout()
 plt.grid(True)

@@ -17,17 +17,17 @@ from eval_utils import plot_training_curves_separate
 
 # Train Paramaters
 batch_size = 16
-num_reads = 20
+num_reads = 10
 learning_rate = 0.001
 n_heads = 16
 at_dim = 16
 at_layer = 2
 dim_squeeze = True
-train_seqs = 40000
-test_seqs = 2500
+train_seqs = 10000
+test_seqs = 5000
 num_epochs = 75
-plot_dir = f"/media/hdd1/MoritzBa/Plots/Time_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
-output_dir_model = f"/media/hdd1/MoritzBa/Models/Time_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
+plot_dir = f"/media/hdd1/MoritzBa/Plots/Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
+output_dir_model = f"/media/hdd1/MoritzBa/Models/Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
 print(f"""
 Training Process Details of Multi CTC Training:
 -------------------------
@@ -44,11 +44,11 @@ Testing Sequences: {test_seqs}
 """)
 
 #Prep
-device = get_device(gpu_index=3)
+device = get_device(gpu_index=1)
 #Ideal Data
 #data_path = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Numpy"
 #Realistic Data
-data_path = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
+data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
 max_length = 2100
 max_length, train_loader = get_data_loader(data_path,train_seqs, batch_size = batch_size, num_reads=num_reads, dim_squeeze=True, overwrite_max_length = max_length)

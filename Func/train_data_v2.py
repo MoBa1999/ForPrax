@@ -244,8 +244,8 @@ clear_seed_file = "/media/hdd1/MoritzBa/Data/clear_seeds.npy"
 
 
 
-#generate_fasta_files(50000,fasta_folder,1,bias=0.75, start = 0)
-seeds = [9258, 18205]
+#generate_fasta_files(50000,fasta_folder,1,bias=0.75, start = 50000)
+#seeds = [9258, 18205]
 #plot_sequence(fasta_folder,blow5_folder,seeds = seeds, start=0, squigulator_type="--ideal")
-process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=0)
+process_sequence(fasta_folder,blow5_folder,numpy_folder,20,clear_seed_file, start=50000)
 
