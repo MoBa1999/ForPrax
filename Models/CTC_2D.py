@@ -7,12 +7,12 @@ from eval_utils import evaluate_model_ham
 
 class CTC_2D_Model(nn.Module):
     def __init__(self, input_length, tar_length, classes = 5, conv_1_dim = 10, conv_2_dim = 20,attention_dim =40,
-                  tar_len_multiple=2, num_reads = 1, n_heads = 8, at_layer =1):
+                  tar_len_multiple=2, num_reads = 1, n_heads = 8, at_layer =1, kernel_2 = 3):
         super(CTC_2D_Model, self).__init__()
 
 
         self.conv1 = nn.Conv2d(in_channels=1, out_channels=conv_1_dim, kernel_size = (num_reads,1), stride=1, padding='same')
-        self.conv2 = nn.Conv2d(in_channels=conv_1_dim, out_channels=conv_2_dim, kernel_size = (num_reads,3), stride=1, padding=(0,1))
+        self.conv2 = nn.Conv2d(in_channels=conv_1_dim, out_channels=conv_2_dim, kernel_size = (num_reads,kernel_2), stride=1, padding=(0,int((kernel_2-1)/2)))
         # 1D Convolutional Layers for each input sequence
         #self.conv1d_1 = nn.Conv1d(in_channels=num_reads, out_channels=conv_1_dim, kernel_size=1)
         #self.conv1d_2 = nn.Conv1d(in_channels=conv_1_dim, out_channels=conv_2_dim, kernel_size=3, padding = 1)
@@ -178,7 +178,7 @@ class CTC_2D_Model(nn.Module):
                     f"Theoretical Accuracy from Levenshtein: {theoretical_accuracy:.2f}%,"
                     f"Test-Lev-Accuracy: {test_acc:.2f}")
             
-            if avg_loss <= 0.001:
+            if avg_loss <= 0.05:
                 print(f"Training completed early! -> Maximum Test Accuracy: {max(test_accs)}")
                 return loss_, ham_dist_, accs_, test_accs
 
