@@ -15,14 +15,14 @@ from CTC_Test import CTC_Test_Model
 import seaborn as sns
 
 #test_path = "/media/hdd1/MoritzBa/Test_Data/Rd_Data_Numpy"
-test_path = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
+test_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
 model_path_general = "/media/hdd1/MoritzBa/Models"
 
 
 test_lev_accuracies = {}
 
-seqs = [10000, 20000, 40000]
+seqs = [10000, 20000, 40000,80000]
 nr = [1, 5, 10]
 device = get_device(gpu_index=1)
 max_length = 2100
@@ -34,13 +34,13 @@ for r in nr:
 for seq in seqs:
     for r in nr:
         try:
-            model_name = f"Time_{seq}_s_75_ep_{r}_r.pth"
+            model_name = f"Data_{seq}_s_75_ep_{r}_r.pth"
             model_path = os.path.join(model_path_general, model_name)
       
             _, test_loader = get_data_loader(
                 test_path, 
-                end_sequence=50000, 
-                start_sequence=40000, 
+                end_sequence=100000, 
+                start_sequence=80000, 
                 batch_size=16, 
                 num_reads=r, 
                 overwrite_max_length=max_length, 
@@ -83,11 +83,11 @@ for r in nr:
 
         
 
-plt.xlabel('Training Sequences', fontsize=14)
-plt.ylabel('Test Levenshtein Accuracy', fontsize=14)
-plt.tick_params(axis='both', labelsize=12)
-plt.xlim(0,50000)
-plt.ylim(60,100)
+plt.xlabel('Training Sequences', fontsize=16)
+plt.ylabel('Test Levenshtein Accuracy', fontsize=16)
+plt.tick_params(axis='both', labelsize=14)
+plt.xlim(0,90000)
+plt.ylim(50,80)
 plt.legend()
 plt.tight_layout()
 plt.grid(True)

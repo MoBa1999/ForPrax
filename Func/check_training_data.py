@@ -71,8 +71,8 @@ signals = []
 seqs = []
 data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
-sequence = 1000 #7000 zum trainieren
-num_reads = []
+sequence = 60002 #7000 zum trainieren
+num_reads = [3,4,5,6,7,8,9]
 signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
 for j in num_reads:
     # Load signal and pad to max_length
@@ -84,7 +84,7 @@ seeds = np.load("/media/hdd1/MoritzBa/Data/clear_seeds.npy")
 #seeds = seeds[len(seeds)-50:len(seeds)-1]
 
 
-plot_squigulator(fasta_dir,example_folder,5,seeds, sequence, squig="")  
+#plot_squigulator(fasta_dir,example_folder,20,seeds, sequence, squig="")  
 
 #plot_squigulator(fasta_dir,example_folder,3,[1,2,3,4,5], sequence, squig="")    
 plt.xlim(0,400)

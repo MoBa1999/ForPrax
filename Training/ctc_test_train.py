@@ -17,13 +17,13 @@ from eval_utils import plot_training_curves_separate
 
 # Train Paramaters
 batch_size = 16
-num_reads = 10
+num_reads = 1
 learning_rate = 0.001
 n_heads = 16
 at_dim = 16
 at_layer = 2
 dim_squeeze = True
-train_seqs = 10000
+train_seqs = 80000
 test_seqs = 5000
 num_epochs = 75
 plot_dir = f"/media/hdd1/MoritzBa/Plots/Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
@@ -44,7 +44,7 @@ Testing Sequences: {test_seqs}
 """)
 
 #Prep
-device = get_device(gpu_index=1)
+device = get_device(gpu_index=3)
 #Ideal Data
 #data_path = "/media/hdd1/MoritzBa/Ideal_Data/Rd_Data_Numpy"
 #Realistic Data
