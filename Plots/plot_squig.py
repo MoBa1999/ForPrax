@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import os 
 import subprocess
 import pyslow5
+import seaborn as sns
 
 
 def check_squigulator(fasta_folder, blow5_folder, reads_per_sequence):
@@ -32,7 +33,7 @@ def check_squigulator(fasta_folder, blow5_folder, reads_per_sequence):
             clear_seeds.append(j+1)
     return clear_seeds
 
-def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, squig="--ideal"):
+def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, squig="--ideal", label = None):
     print("Function to plot Squigulator")
     input_file = f"{fasta_folder}/fasta_file_{seq}.fasta"
     start_test_point = None
@@ -52,7 +53,10 @@ def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, 
         reads = s5.seq_reads()
         for read in reads:
             signal = read['signal']
-            plt.plot(signal, label = f"Squigulator Signal with ideal type: {squig}")
+            if label:
+                 plt.plot(signal, label = label, linewidth = 3)
+            else:
+                plt.plot(signal, label = f"Squigulator Signal with ideal type: {squig}", linewidth = 10)
             if j == 0:
                 start_test_point = signal[0]
         if start_test_point != signal[0]:
@@ -64,30 +68,28 @@ def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, 
 #fasta_dir = "/media/hdd1/MoritzBa/Data/Rd_Data_Fasta"
 fasta_dir = "/workspaces/ForPrax/Data_Save/Data/Rd_Data_Fasta"
 example_folder = "/workspaces/ForPrax/Temp"
-seeds = check_squigulator(fasta_dir,example_folder,40000)
-print(seeds)
-seeds = np.array(seeds)
-np.save("/workspaces/ForPrax/Data_Save/Data/clear_seeds.npy", seeds)
+
+
 signals = []
 seqs = []
 data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
 sequence = 60002 #7000 zum trainieren
-num_reads = []
-#signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
-for j in num_reads:
-    # Load signal and pad to max_length
-    
-    plt.plot(signals[j,:], label = f"Data Read {j}")
 
-
-seeds = np.load("/media/hdd1/MoritzBa/Data/clear_seeds.npy")
 #seeds = seeds[len(seeds)-50:len(seeds)-1]
 
+seeds = [1,2,3,4,5]
 
-#plot_squigulator(fasta_dir,example_folder,20,seeds, sequence, squig="")  
-
-#plot_squigulator(fasta_dir,example_folder,3,[1,2,3,4,5], sequence, squig="")    
-plt.xlim(0,400)
-plt.legend()
+sns.set_palette("muted")
+plt.figure(figsize=(10, 6))
+plot_squigulator(fasta_dir,example_folder,1,seeds, sequence, squig="", label = "Realistic/Default Squigulator Data")  
+plot_squigulator(fasta_dir,example_folder,1,seeds, sequence, squig="--ideal", label = "Ideal Squigulator Data")    
+plot_squigulator(fasta_dir,example_folder,1,seeds, sequence, squig="--ideal-time", label = "Time-Ideal Squigulator Data")  
+plt.xlim(0,200)
+plt.xlabel("N samples", fontsize= 16)
+plt.ylabel("Current (pA)", fontsize=16)
+plt.tick_params(axis='both', labelsize=14)
+plt.legend(fontsize = 14)
+plt.tight_layout()
+plt.grid(True)
 plt.show()

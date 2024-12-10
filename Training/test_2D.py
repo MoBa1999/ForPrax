@@ -20,17 +20,18 @@ from eval_utils import plot_training_curves_separate
 
 # Train Paramaters
 batch_size = 16
-num_reads = 10
+num_reads = 2
 learning_rate = 0.001
 n_heads = 16
-at_dim = 32
+at_dim = 16
 at_layer = 2
+kernel_2d = 9
 dim_squeeze = True
-train_seqs = 20000
-test_seqs = 2500
-num_epochs = 50
+train_seqs = 80000
+test_seqs = 5000
+num_epochs = 75
 plot_dir = f"/media/hdd1/MoritzBa/Plots/2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
-output_dir_model = f"/media/hdd1/MoritzBa/Models/2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
+output_dir_model = f"/workspaces/ForPrax/Model_Save/2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
 print(f"""
 Training Process Details of Multi CTC 2D Training:
 -------------------------
@@ -38,6 +39,7 @@ Batch Size: {batch_size}
 Heads : {n_heads}
 At Dim : {at_dim}
 Attention Layers : {at_layer}
+Kernel Length: {kernel_2d}
 Number of Reads: {num_reads}
 Number of Epochs: {num_epochs}
 Start Learning Rate: {learning_rate}
@@ -55,7 +57,7 @@ max_2, test_loader = get_data_loader(data_path,end_sequence=train_seqs+test_seqs
 
 #Create Model and Train
 model = CTC_2D_Model(input_length=max_length, tar_length=200, conv_1_dim=32,conv_2_dim=32, attention_dim=at_dim, num_reads=num_reads,
-                 n_heads = n_heads, at_layer = at_layer)
+                 n_heads = n_heads, at_layer = at_layer, kernel_2=kernel_2d)
 losses,n_accuracies, ham_accuracies,test_accs = model.train_model(train_loader, num_epochs=num_epochs, learning_rate=learning_rate,
                                                                    device=device, test_set=test_loader, save_path=output_dir_model,scheduler_type="cosine_restart")
     
