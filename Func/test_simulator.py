@@ -11,7 +11,7 @@ seq = 0
 # Verzeichnis, in dem die Ausgabe-BLOW5-Dateien gespeichert werden (temporär)
 blow5_folder = "/workspaces/ForPrax/Temp"
 # Pfad zur Eingabedatei im FASTA-Format.
-input_file = f"/media/hdd1/MoritzBa/Time/Test/t.fasta"
+input_file = f"{fasta_folder}/fasta_file_{seq}.fasta"
 # Pfad zur Ausgabedatei im BLOW5-Format.
 output_file = f"{blow5_folder}/seq_{seq}_{0}.blow5"
 # Seed 1: Definition des Random Seeds

@@ -145,11 +145,14 @@ def evaluate_model(model, data_loader, criterion, device, tar_len=200):
 
     return avg_loss, accuracy, ham_ac
 
-def evaluate_model_ham(model, data_loader, device):
+def evaluate_model_ham(model, data_loader, device, lengths = None):
     model.eval()  # Set the model to evaluation mode
     total_loss = 0.0
     total_hamming_distance = 0
     total_samples = 0
+
+    if lengths:
+        len_ = []
 
     with torch.no_grad():  # No need to compute gradients during evaluation
         for inputs, labels in data_loader:
@@ -173,9 +176,14 @@ def evaluate_model_ham(model, data_loader, device):
                 # Compute the Hamming/Levenshtein distance
                 total_hamming_distance += distance(pred_seq_collapsed, true_seq)
                 total_samples += 1
+                if lengths:
+                    len_.append(len(pred_seq_collapsed))
 
     avg_hamming_distance = total_hamming_distance / total_samples
     theoretical_accuracy = (model.tar_length - avg_hamming_distance) / model.tar_length * 100
+
+    if lengths:
+        return len_
 
     return theoretical_accuracy
 

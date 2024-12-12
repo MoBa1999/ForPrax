@@ -10,12 +10,12 @@ from eval_utils import evaluate_model_ham
 
 class CTC_Test_Model(nn.Module):
     def __init__(self, input_length, tar_length, classes = 5, conv_1_dim = 10, conv_2_dim = 20,attention_dim =40,
-                  tar_len_multiple=2, num_reads = 1, n_heads = 8, at_layer =1):
+                  tar_len_multiple=2, num_reads = 1, n_heads = 8, at_layer =1, kernel_1 = 1, kernel_2 = 3):
         super(CTC_Test_Model, self).__init__()
 
         # 1D Convolutional Layers for each input sequence
-        self.conv1d_1 = nn.Conv1d(in_channels=num_reads, out_channels=conv_1_dim, kernel_size=1)
-        self.conv1d_2 = nn.Conv1d(in_channels=conv_1_dim, out_channels=conv_2_dim, kernel_size=3, padding = 1)
+        self.conv1d_1 = nn.Conv1d(in_channels=num_reads, out_channels=conv_1_dim, kernel_size=kernel_1, padding = 'same')
+        self.conv1d_2 = nn.Conv1d(in_channels=conv_1_dim, out_channels=conv_2_dim, kernel_size=kernel_2, padding = 'same')
         self.first_relu = nn.ReLU()
         self.conv1d_3 = nn.Conv1d(in_channels=conv_2_dim, out_channels=attention_dim, kernel_size=3, padding = 1)
         # 2D Convolutional Layers for combined input
