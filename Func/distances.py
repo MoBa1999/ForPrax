@@ -14,6 +14,21 @@ from torch import nn
 import matplotlib.pyplot as plt
 from CTC_Test import CTC_Test_Model
 import seaborn as sns
+import random
+import numpy as np
+
+def generate_random_sequence(length, bias):
+        def biased_choice(last_base):
+            weights = [0.25, 0.25, 0.25, 0.25]
+            if last_base is not None:
+                weights['ATGC'.index(last_base)] *= bias
+                weights = [w / sum(weights) for w in weights]  # Normalize weights
+            return random.choices('ATGC', weights=weights)[0]
+
+        sequence = ""
+        for _ in range(length):
+            sequence += biased_choice(sequence[-1] if sequence else None)
+        return sequence
 
 def hamming_distance(s1, s2):
     """
@@ -38,18 +53,20 @@ def compare_distances(string1, string2):
     except ValueError as e:
         ham_distance = str(e)
 
-    # Ergebnisse ausgeben
-    print(f"String 1: {string1}")
-    print(f"String 2: {string2}")
-    print(f"Levenshtein Distance: {lev_distance}")
-    print(f"Hamming Distance: {ham_distance}")
+    return ham_distance, lev_distance
 
-
-print("Vergleich von Levenshtein- und Hamming-Distanz")
-string1 = input("Bitte den ersten String eingeben: ")
-string2 = input("Bitte den zweiten String eingeben: ")
-
-compare_distances(string1, string2)
+def check_random_sequences(count):
+    ham_ = []
+    lev_ = []
+    for _ in range(count):
+        string1 = generate_random_sequence(200, 0.75)
+        string2 = generate_random_sequence(200, 0.75)
+    
+        ham, lev = compare_distances(string1, string2)
+    
+        ham_.append(ham)
+        lev_.append(lev)
+    return ham_,lev_
 
 
 
@@ -72,7 +89,7 @@ max_length = 2100
 _, test_loader = get_data_loader(
                 test_path, 
                 end_sequence=100000, 
-                start_sequence=80000, 
+                start_sequence=95000, 
                 batch_size=16, 
                 num_reads=1, 
                 overwrite_max_length=max_length, 
@@ -90,8 +107,58 @@ model.to(device)
 
 lengths = evaluate_model_ham(model, test_loader,device,lengths=True)
 
+print(lengths)
+plt.figure(figsize=(10, 6))
+plt.hist(lengths, bins='auto', edgecolor='black')
+plt.title('Histogram of Lengths')
+plt.xlabel('Length')
+plt.ylabel('Frequency')
+plt.grid(True, alpha=0.3)
 
-# Example usage
+hams, levs = check_random_sequences(5000)
+
+plt.figure(figsize=(12, 6))
+
+# Plot histograms
+plt.hist(hams, bins='auto', alpha=0.7, label='Hamming Distance', edgecolor='black')
+plt.hist(levs, bins='auto', alpha=0.7, label='Levenshtein Distance', edgecolor='black')
+
+plt.title('Histogram of Hamming and Levenshtein Distances')
+plt.xlabel('Distance')
+plt.ylabel('Frequency')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Add mean lines
+mean_ham = np.mean(hams)
+mean_lev = np.mean(levs)
+plt.axvline(mean_ham, color='blue', linestyle='dashed', linewidth=2, label=f'Mean Hamming: {mean_ham:.2f}')
+plt.axvline(mean_lev, color='red', linestyle='dashed', linewidth=2, label=f'Mean Levenshtein: {mean_lev:.2f}')
+
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(10, 6))
+
+# Plot histogram for Levenshtein distance
+plt.hist(levs, bins='auto', alpha=0.7, label='Levenshtein Distance', edgecolor='black')
+
+plt.xlabel('Levenshtein-Distance', fontsize=20)
+plt.ylabel('Frequency', fontsize=20)
+plt.legend(fontsize=16)
+plt.grid(True, alpha=0.3)
+
+# Increase tick label font size
+plt.tick_params(axis='both', which='major', labelsize=16)
+
+# Add mean line
+mean_lev = np.mean(levs)
+plt.axvline(mean_lev, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_lev:.2f}')
+
+plt.legend(fontsize=16)
+plt.tight_layout()
+plt.show()
 
 
 
@@ -99,22 +166,3 @@ lengths = evaluate_model_ham(model, test_loader,device,lengths=True)
 
 
     
-
-# Create the plot
-sns.set_palette("muted")
-plt.figure(figsize=(10, 6))
-
-for r in nr:
-    plt.scatter(test_lev_accuracies[r]["sequences"], test_lev_accuracies[r]["test_accs"], label = f" Number of Input-Reads: {r}", marker ='o', s=90)
-
-        
-
-plt.xlabel('Training Sequences', fontsize=20)
-plt.ylabel('Test Levenshtein Accuracy', fontsize=20)
-plt.tick_params(axis='both', labelsize=16)
-plt.xlim(0,90000)
-plt.ylim(45,75)
-plt.legend(fontsize =16)
-plt.tight_layout()
-plt.grid(True)
-plt.show()

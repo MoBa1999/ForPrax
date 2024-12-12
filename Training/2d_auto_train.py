@@ -16,7 +16,7 @@ from eval_utils import evaluate_model_ham
 from eval_utils import plot_training_curves_separate
 
 # Train Parameters
-kernel_1 = 19
+kernel_1 = 29
 kernel_2 = 9
 batch_size = 16
 learning_rate = 0.001
@@ -26,19 +26,19 @@ at_layer = 2
 dim_squeeze = True
 train_seqs = 80000
 test_seqs = 5000
-num_epochs = 75
+num_epochs = 10
 
 # List of num_reads values to iterate over
-num_reads_list = [1, 2, 3, 4]
+num_reads_list = [1, 2, 5,10]
 
-device = get_device(gpu_index=1)
+device = get_device(gpu_index=2)
 data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 
 for num_reads in num_reads_list:
     print(f"\nStarting training for num_reads={num_reads}\n")
 
     plot_dir = f"/media/hdd1/MoritzBa/Plots/2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
-    output_dir_model = f"/workspaces/ForPrax/Model_Save/Test_2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
+    output_dir_model = f"/workspaces/ForPrax/Model_Save/2D_Data_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
 
     print(f"""
     Training Process Details of Multi CTC 2D Training:
