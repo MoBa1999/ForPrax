@@ -25,18 +25,19 @@ at_layer = 2
 dim_squeeze = True
 train_seqs = 40000
 test_seqs = 5000
-num_epochs = 20
-num_reads_list = [ 1, 2,5, 10]  # List of num_reads to iterate over
+num_epochs = 75
+num_reads_list = [1, 2, 5, 10]  # List of num_reads to iterate over
 
 # Prep
 device = get_device(gpu_index=2)
 # Realistic Data
-data_path = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
+# data_path = "/media/hdd1/MoritzBa/Time/Rd_Data_Numpy"
+data_path = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Numpy"
 max_length = 2100
 
 for num_reads in num_reads_list:
-    plot_dir = f"/media/hdd1/MoritzBa/Plots/Ideal_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
-    output_dir_model = f"/media/hdd1/MoritzBa/Models/Ideal_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
+    plot_dir = f"/media/hdd1/MoritzBa/Plots/Real_Ideal_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.png"
+    output_dir_model = f"/media/hdd1/MoritzBa/Models/Real_Ideal_{train_seqs}_s_{num_epochs}_ep_{num_reads}_r.pth"
     
     print(f"""
     Training Process Details of Multi CTC Training:

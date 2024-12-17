@@ -47,8 +47,8 @@ for r in nr:
             )
     for seq in seqs:
         model = CTC_Test_Model(input_length=max_length, tar_length=200, conv_1_dim=16,conv_2_dim=32, attention_dim=16, num_reads=r,
-                 n_heads = 16, at_layer = 2)
-        model_name = f"Data_{seq}_s_75_ep_{r}_r.pth"
+                 n_heads = 16, at_layer = 2,kernel_1 = 29, kernel_2 = 9)
+        model_name = f"Data_{seq}_s_10_ep_{r}_r.pth"
         try:
             
             model_path = os.path.join(model_path_general, model_name)
@@ -96,13 +96,13 @@ for r in nr:
             )
     for seq in seqs:
         try:
-            model_name = f"2D_Data_{seq}_s_{75}_ep_{r}_r.pth"
+            model_name = f"2D_Data_{seq}_s_{10}_ep_{r}_r.pth"
             model_path = os.path.join(model_path_2D, model_name)
       
             
         
             model = CTC_2D_Model(input_length=max_length, tar_length=200, conv_1_dim=32,conv_2_dim=32, attention_dim=16, num_reads=r,
-                 n_heads = 16, at_layer = 2, kernel_2=9)
+                 n_heads = 16, at_layer = 2, kernel_2=9, kernel_1 = 29)
             model.load_state_dict(torch.load(model_path))
             print(f"The following model is analyzed: {model_path}")
         except Exception as e:

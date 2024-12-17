@@ -61,31 +61,31 @@ def plot_squigulator(fasta_folder, blow5_folder, reads_per_sequence,seeds, seq, 
 
 
 
-#fasta_dir = "/media/hdd1/MoritzBa/Data/Rd_Data_Fasta"
-fasta_dir = "/workspaces/ForPrax/Data_Save/Data/Rd_Data_Fasta"
+fasta_dir = "/media/hdd1/MoritzBa/Data/Rd_Data_Fasta"
+#fasta_dir = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Fasta"
 example_folder = "/workspaces/ForPrax/Temp"
-seeds = check_squigulator(fasta_dir,example_folder,40000)
-print(seeds)
-seeds = np.array(seeds)
-np.save("/workspaces/ForPrax/Data_Save/Data/clear_seeds.npy", seeds)
+#seeds = check_squigulator(fasta_dir,example_folder,40000)
+#print(seeds)
+#seeds = np.array(seeds)
+#np.save("/workspaces/ForPrax/Data_Save/Ideal/clear_seeds.npy", seeds)
 signals = []
 seqs = []
-data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
+data_path = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Numpy"
 
-sequence = 60002 #7000 zum trainieren
-num_reads = []
-#signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
+sequence = 3 #7000 zum trainieren
+num_reads = [0,1,2]
+signals = np.load(f"{data_path}/signals_seq_{sequence}.npy")
 for j in num_reads:
     # Load signal and pad to max_length
     
     plt.plot(signals[j,:], label = f"Data Read {j}")
 
 
-seeds = np.load("/media/hdd1/MoritzBa/Data/clear_seeds.npy")
+#seeds = np.load("/media/hdd1/MoritzBa/Data/clear_seeds.npy")
 #seeds = seeds[len(seeds)-50:len(seeds)-1]
 
 
-#plot_squigulator(fasta_dir,example_folder,20,seeds, sequence, squig="")  
+#plot_squigulator(fasta_dir,example_folder,2,seeds, sequence, squig="")  
 
 #plot_squigulator(fasta_dir,example_folder,3,[1,2,3,4,5], sequence, squig="")    
 plt.xlim(0,400)

@@ -236,16 +236,16 @@ def plot_sequence(fasta_folder, blow5_folder, seeds, squigulator_type=None, star
         except FileNotFoundError:
             print(f"FASTA file not found: {fasta_file}")
 
-fasta_folder = "/workspaces/ForPrax/Data_Save/Data/Rd_Data_Fasta"
-blow5_folder = "/workspaces/ForPrax/Data_Save/Data/Rd_Data_Blow5"
-numpy_folder = "/workspaces/ForPrax/Data_Save/Data/Rd_Data_Numpy"
-clear_seed_file = "/workspaces/ForPrax/Data_Save/Data/clear_seeds.npy"
+fasta_folder = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Fasta"
+blow5_folder = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Blow5"
+numpy_folder = "/workspaces/ForPrax/Data_Save/Ideal/Rd_Data_Numpy"
+clear_seed_file = "/workspaces/ForPrax/Data_Save/Ideal/clear_seeds.npy"
 
 
 
 
-#generate_fasta_files(80000,fasta_folder,1,bias=0.75, start = 0)
+#generate_fasta_files(50000,fasta_folder,1,bias=0.75, start = 0)
 #seeds = [9258, 18205]
 #plot_sequence(fasta_folder,blow5_folder,seeds = seeds, start=0, squigulator_type="--ideal")
-process_sequence(fasta_folder,blow5_folder,numpy_folder,10,clear_seed_file, start=0)
+process_sequence(fasta_folder,blow5_folder,numpy_folder,10,clear_seed_file, start=0, squigulator_type="--ideal")
 

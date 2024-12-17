@@ -19,10 +19,10 @@ from eval_utils import plot_training_curves_separate
 
 
 # Train Paramaters
-kernel_1 = 19
+kernel_1 = 29
 kernel_2 = 9
 batch_size = 16
-num_reads = 2
+num_reads = 10
 learning_rate = 0.001
 n_heads = 16
 at_dim = 16
@@ -50,7 +50,7 @@ Training Sequences: {train_seqs}
 Testing Sequences: {test_seqs}
 """)
 #Prep
-device = get_device(gpu_index=0)
+device = get_device(gpu_index=1)
 data_path = "/media/hdd1/MoritzBa/Data/Rd_Data_Numpy"
 max_length = 2100
 max_length, train_loader = get_data_loader(data_path,train_seqs, batch_size = batch_size, num_reads=num_reads, dim_squeeze=True, overwrite_max_length = max_length)
